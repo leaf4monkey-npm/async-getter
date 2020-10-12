@@ -1,0 +1,50 @@
+{
+  "name": "async-getter",
+  "version": "0.1.1",
+  "description": "Merge duplicated async function calls.",
+  "main": "dist/index.js",
+  "author": "leaf4monkey <joc98@163.com>",
+  "license": "MIT",
+  "scripts": {
+    "clear": "rm -rf tsconfig.tsbuildinfo dist",
+    "build": "yarn run clear && tsc --build tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "benchmark": "yarn run build && node --unhandled-rejections=strict example/benchmark.js",
+    "build2015": "yarn run clear && tsc --build tsconfig.build2015.json",
+    "benchmark2015": "yarn run build2015 && node --unhandled-rejections=strict example/benchmark.js",
+    "prepublishOnly": "yarn test && yarn run build"
+  },
+  "files": [
+    "./dist"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/benchmark": "^1.0.33",
+    "@types/chai": "^4.2.13",
+    "@types/chai-as-promised": "^7.1.3",
+    "@types/mocha": "^8.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "benchmark": "^2.1.4",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-mocha": "^8.0.0",
+    "lodash": "^4.17.20",
+    "mocha": "^8.1.3",
+    "prettier": "^2.1.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.162",
+    "@types/sinon": "^9.0.8",
+    "sinon": "^9.2.0"
+  }
+}
