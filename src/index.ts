@@ -81,7 +81,16 @@ export class AsyncGetter<K, V> {
 
   static wrap <K, V, T extends BlockedFunctionMap<K, V>>(obj: T, methodName: keyof T, options?: Options<K, V>): AsyncGetter<K, V> {
     const method = obj[methodName].bind(obj);
-    return new AsyncGetter((id: K) => method(id), options);
+    return new AsyncGetter<K, V>((id: K) => method(id), options);
+  }
+
+  static wrapFunc <K, V>(method: BlockedFunction<K, V>, ctx?: object, options?: Options<K, V>): BlockedFunction<K, V> {
+    if (method) {
+      method = method.bind(ctx);
+    }
+    const ins = new AsyncGetter<K, V>(method, options);
+
+    return (id: K): Promise<V> => ins.load(id);
   }
 
   callCount = 0;
