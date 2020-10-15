@@ -1,6 +1,6 @@
 {
   "name": "async-getter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Merge duplicated async function calls.",
   "main": "dist/index.js",
   "author": "leaf4monkey <joc98@163.com>",
