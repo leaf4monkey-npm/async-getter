@@ -1,18 +1,19 @@
 {
   "name": "async-getter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Merge duplicated async function calls.",
   "main": "dist/index.js",
   "author": "leaf4monkey <joc98@163.com>",
   "license": "MIT",
   "scripts": {
-    "clear": "rm -rf tsconfig.tsbuildinfo dist",
-    "build": "yarn run clear && tsc --build tsconfig.build.json",
+    "clear": "rm -rf tsconfig.tsbuildinfo dist dist-es2015",
+    "build2019": "tsc --build tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "test": "mocha -r ts-node/register 'tests/**/*.ts'",
-    "benchmark": "yarn run build && node --unhandled-rejections=strict example/benchmark.js",
-    "build2015": "yarn run clear && tsc --build tsconfig.build2015.json",
-    "benchmark2015": "yarn run build2015 && node --unhandled-rejections=strict example/benchmark.js",
+    "benchmark": "yarn run clear && yarn run build2019 && node --unhandled-rejections=strict example/benchmark.js",
+    "build2015": "tsc --build tsconfig.build2015.json",
+    "build": "yarn run clear && yarn run build2015 && yarn run build2019",
+    "benchmark2015": "yarn run clear && yarn run build2015 && node --unhandled-rejections=strict example/benchmark.js 2015",
     "prepublishOnly": "yarn test && yarn run build"
   },
   "files": [

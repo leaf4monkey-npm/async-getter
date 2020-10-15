@@ -2,7 +2,9 @@ const { promises: promisifiedFS, readFileSync } = require('fs');
 const { join } = require('path');
 const { deepStrictEqual } = require('assert');
 
-const { AsyncGetter, Options } = require('../dist');
+const { AsyncGetter } = process.argv[process.argv.length - 1] === '2015'
+  ? require('../dist-es2015')
+  : require('../dist');
 
 const FILE_PATH = join(__dirname, './number-list.json');
 const CALL_TIMES = 1e4;

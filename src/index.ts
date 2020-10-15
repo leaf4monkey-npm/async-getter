@@ -64,6 +64,10 @@ const checkNonnegNum = <K, V>(options: Options<K, V>, key: string, canbeZero?: b
 
 export type BlockedFunction<K, V> = (id: K) => Promise<V | null>;
 
+interface BlockedFunctionMap<K, V> {
+  [prop: string]: BlockedFunction<K, V>;
+}
+
 export class AsyncGetter<K, V> {
   constructor (fn: BlockedFunction<K, V>, options?: Options<K, V>) {
     this._blockedFunc = fn;
@@ -73,6 +77,11 @@ export class AsyncGetter<K, V> {
     checkNonnegNum(options, 'parallel');
     this._cacheMap = options.cacheMap || new Map<K, Cache<V>>();
     this._options = options;
+  }
+
+  static wrap <K, V, T extends BlockedFunctionMap<K, V>>(obj: T, methodName: keyof T, options?: Options<K, V>): AsyncGetter<K, V> {
+    const method = obj[methodName].bind(obj);
+    return new AsyncGetter((id: K) => method(id), options);
   }
 
   callCount = 0;
