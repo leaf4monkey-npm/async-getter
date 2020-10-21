@@ -68,6 +68,8 @@ interface BlockedFunctionMap<K, V> {
   [prop: string]: BlockedFunction<K, V>;
 }
 
+let Promise: PromiseConstructor = global.Promise;
+
 export class AsyncGetter<K, V> {
   constructor (fn: BlockedFunction<K, V>, options?: Options<K, V>) {
     this._blockedFunc = fn;
@@ -77,6 +79,10 @@ export class AsyncGetter<K, V> {
     checkNonnegNum(options, 'parallel');
     this._cacheMap = options.cacheMap || new Map<K, Cache<V>>();
     this._options = options;
+  }
+
+  static set Promise (PromiseImplementation: PromiseConstructor) {
+    Promise = PromiseImplementation;
   }
 
   static wrap <K, V, T extends BlockedFunctionMap<K, V>>(obj: T, methodName: keyof T, options?: Options<K, V>): AsyncGetter<K, V> {
@@ -127,7 +133,7 @@ export class AsyncGetter<K, V> {
     }
   }
 
-  async load (id: K): Promise<V> {
+  load (id: K): Promise<V> {
     this.loadCount++;
     let cache = this._cacheMap.get(id) as Cache<V>;
     if (!cache || cache.expiresAt < Date.now()) {
