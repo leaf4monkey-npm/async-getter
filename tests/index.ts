@@ -196,6 +196,38 @@ describe('AsyncGetter', () => {
     });
   });
 
+  context('never timeout', () => {
+    let callCount: number;
+    let rawAsyncFn: WrappedCallback;
+    let maxTimes: number;
+    beforeEach(() => {
+      options = {
+        expiresInSec: 0,
+        maxTryTimes: 3,
+        parallel: 1,
+      };
+
+      callCount = 0;
+      maxTimes = options.maxTryTimes;
+      rawAsyncFn = asyncFunc;
+      asyncFunc = async (id: string) => {
+        ++callCount;
+        await new Promise(r => setTimeout(r, 400));
+        if (callCount < maxTimes) {
+          throw new Error(`Call count has not reach ${maxTimes} yet.`);
+        }
+        return rawAsyncFn(id);
+      };
+
+      initIns();
+    });
+    afterEach(() => {
+      asyncFunc = rawAsyncFn;
+    });
+    it('should reject with timeout error', async () => {
+      await expect(asyncGetter.load('one')).to.eventually.equals(1);
+    });
+  });
 
   context('timeout', () => {
     context('executing time exceed `options.expiresInSec`', () => {

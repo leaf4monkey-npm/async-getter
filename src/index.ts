@@ -112,7 +112,7 @@ export class AsyncGetter<K, V> {
         ...baseData,
         timer,
         promises: [],
-        expiresAt: timer.expiresAt,
+        expiresAt: timer?.expiresAt,
         restTimes: this._options.maxTryTimes,
       };
     }
